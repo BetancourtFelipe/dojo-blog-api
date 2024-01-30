@@ -4,6 +4,7 @@
   <input type="text" v-model="search">
   <p>search term - {{ search }}</p>
   <div v-for="name in matchingNames" :key="name">{{ name }}</div>
+  <button @click="handleClick">stop watching</button>
 
      <!-- Display info for ninjaOne using refs -->
   <!-- <h2>Refs</h2>
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 
 export default {
   name: 'HomeView',
@@ -33,13 +34,26 @@ export default {
     const search = ref('')
     const names = ref(['ivo', 'lukas', 'jalal', 'felipe', 'mandla', 'fabio', 'hoshi'])
 
+    const stopWatch = watch(search, () => {
+      console.log('watch function')
+    })
+
+    const stopEffect= watchEffect(() => {
+      console.log('watchEffect function', search.value)
+    })
+
     const matchingNames = computed(() =>{
       return names.value.filter((name) => name.includes(search.value))
     })
 
+    const handleClick = () => {
+      stopWatch()
+      stopEffect()
+    }
 
 
-    return{ names, search, matchingNames }
+
+    return{ names, search, matchingNames, handleClick }
 
      // Define reactive and ref properties
     // const ninjaOne = ref({ name: 'felipe', age: 29 })
