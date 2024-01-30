@@ -1,13 +1,13 @@
 <template>
 <div class="home">
   <h1>Home</h1>
-  <PostList v-if="showPosts" :posts='posts' />
-  <button @click="showPosts = !showPosts">toggle posts</button>
-  <button @click="posts.pop()">delete a post</button>
+  <PostList :posts='posts' />
 
+  <!-- Button to toggle the visibility of posts -->
+  <!-- <button @click="showPosts = !showPosts">toggle posts</button> -->
 
-
-
+  <!-- Button to delete the last post -->
+  <!-- <button @click="posts.pop()">delete a post</button> -->
 
 
 
@@ -45,18 +45,28 @@ export default {
   setup(){
 
     const posts = ref([
-      { title: 'welcome to the blog', body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', id: 1 },
-      { title: 'top 5 css tips', body: 'lorem ipsum Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', id: 2 },
     ])
+    const error = ref(null)
 
-    const showPosts = ref(true)
+    const load = async () => {
+      try {
+        let data = await fetch('http://localhost:3000/posts')
+        if (!data.ok) {
+          throw Error('no data available')
+        }
+        posts.value = await data.json()
+    }
+      catch (err) {
+        error.value = err.message
+        console.log(error.value)
+      }
+}
+
+load()
 
 
 
-
-
-
-
+    // const showPosts = ref(true)
 
     // // Creating a ref named 'search' with an initial value of an empty string
     // const search = ref('')
@@ -91,7 +101,7 @@ export default {
 
 
 
-    return{ posts, showPosts }
+    return{ posts }
 
      // Define reactive and ref properties
     // const ninjaOne = ref({ name: 'felipe', age: 29 })
