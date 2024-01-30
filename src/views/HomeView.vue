@@ -1,7 +1,12 @@
 <template>
 <div class="home">
   <h1>Home</h1>
-  <PostList :posts='posts' />
+  <div v-if="error">{{ error }}</div>
+  <div v-if="posts.length">
+    <PostList :posts='posts' />
+  </div>
+  <div v-else>Loading....</div>
+
 
   <!-- Button to toggle the visibility of posts -->
   <!-- <button @click="showPosts = !showPosts">toggle posts</button> -->
@@ -101,7 +106,7 @@ load()
 
 
 
-    return{ posts }
+    return{ posts, error }
 
      // Define reactive and ref properties
     // const ninjaOne = ref({ name: 'felipe', age: 29 })
