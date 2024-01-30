@@ -1,10 +1,20 @@
 <template>
-<div class="home">Home
+<div class="home">
   <h1>Home</h1>
-  <input type="text" v-model="search">
+  <PostList v-if="showPosts" :posts='posts' />
+  <button @click="showPosts = !showPosts">toggle posts</button>
+  <button @click="posts.pop()">delete a post</button>
+
+
+
+
+
+
+
+  <!-- <input type="text" v-model="search">
   <p>search term - {{ search }}</p>
   <div v-for="name in matchingNames" :key="name">{{ name }}</div>
-  <button @click="handleClick">stop watching</button>
+  <button @click="handleClick">stop watching</button> -->
 
      <!-- Display info for ninjaOne using refs -->
   <!-- <h2>Refs</h2>
@@ -26,34 +36,62 @@
 </template>
 
 <script>
-import { computed, ref, watch, watchEffect } from 'vue';
+import { ref } from 'vue';
+import PostList from '../components/PostList.vue';
 
 export default {
   name: 'HomeView',
+  components: {PostList},
   setup(){
-    const search = ref('')
-    const names = ref(['ivo', 'lukas', 'jalal', 'felipe', 'mandla', 'fabio', 'hoshi'])
 
-    const stopWatch = watch(search, () => {
-      console.log('watch function')
-    })
+    const posts = ref([
+      { title: 'welcome to the blog', body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', id: 1 },
+      { title: 'top 5 css tips', body: 'lorem ipsum Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', id: 2 },
+    ])
 
-    const stopEffect= watchEffect(() => {
-      console.log('watchEffect function', search.value)
-    })
-
-    const matchingNames = computed(() =>{
-      return names.value.filter((name) => name.includes(search.value))
-    })
-
-    const handleClick = () => {
-      stopWatch()
-      stopEffect()
-    }
+    const showPosts = ref(true)
 
 
 
-    return{ names, search, matchingNames, handleClick }
+
+
+
+
+
+    // // Creating a ref named 'search' with an initial value of an empty string
+    // const search = ref('')
+
+    // // Creating a ref named 'names' with an initial array of names
+    // const names = ref(['ivo', 'lukas', 'jalal', 'felipe', 'mandla', 'fabio', 'hoshi'])
+
+    // // Using the watch function to observe changes in 'search'
+    // // and executing a callback when it changes
+    // const stopWatch = watch(search, () => {
+    //   console.log('watch function')
+    // })
+
+
+    // // Using the watchEffect function to reactively execute a callback
+    // // whenever the dependencies (in this case, 'search.value') change
+    // const stopEffect= watchEffect(() => {
+    //   console.log('watchEffect function', search.value)
+    // })
+
+    // // Using the computed function to create a computed property 'matchingNames'
+    // // that filters 'names' based on whether each name includes the current 'search.value'
+    // const matchingNames = computed(() =>{
+    //   return names.value.filter((name) => name.includes(search.value))
+    // })
+
+    // const handleClick = () => {
+    //    // Stopping the watch and watchEffect functions
+    //   stopWatch()
+    //   stopEffect()
+    // }
+
+
+
+    return{ posts, showPosts }
 
      // Define reactive and ref properties
     // const ninjaOne = ref({ name: 'felipe', age: 29 })
